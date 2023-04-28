@@ -1,0 +1,25 @@
+syntax = "proto3";
+package userPb.v1;
+//import "google/protobuf/empty.proto";
+//import "api/qvbilam/page/v1/page.proto";
+option go_package="mall/api/qvbilam/mall/v1/mallPb;v1";
+
+message categoryResponse {
+  int64 id = 1;
+  int64 pid = 2;
+  string name = 3;
+  string tag = 4;
+}
+
+message categoryListResponse {
+  repeated categoryResponse category = 1;
+}
+
+message categoryListRequest {
+  int64 pid = 1;
+}
+
+
+service Mall {
+  rpc GetCategory(categoryListRequest) returns (categoryListResponse);
+}
