@@ -31,7 +31,7 @@ func TestGoodsBusiness_GoodsList(t *testing.T) {
 	initDBClient()
 	b := GoodsBusiness{}
 	b.CategoryID = 2
-	goods, count := b.GoodsList()
+	goods, count := b.List()
 	fmt.Printf("总数: %d\n", count)
 	for _, p := range goods {
 		fmt.Printf("%+v\n", p)

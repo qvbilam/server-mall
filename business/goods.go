@@ -6,15 +6,22 @@ import (
 )
 
 type GoodsBusiness struct {
-	ID         int64
-	IDs        []int64
-	CategoryID int64
-	OnSale     *bool
-	Page       int64
-	PerPage    int64
+	ID          int64
+	IDs         []int64
+	CategoryID  int64
+	OnSale      *bool
+	NeedProduct bool
+	Page        int64
+	PerPage     int64
 }
 
-func (b *GoodsBusiness) GoodsList() ([]*model.Goods, int64) {
+func (b *GoodsBusiness) Detail() *model.Goods {
+	entity := model.Goods{}
+	global.DB.Where(&model.Goods{IDModel: model.IDModel{ID: b.ID}}).Preload("Products.Product").First(&entity)
+	return &entity
+}
+
+func (b *GoodsBusiness) List() ([]*model.Goods, int64) {
 	query := global.DB.Model(&model.Goods{})
 
 	var goods []*model.Goods
@@ -45,11 +52,18 @@ func (b *GoodsBusiness) GoodsList() ([]*model.Goods, int64) {
 		query = query.Scopes(model.Paginate(int(b.Page), int(b.PerPage)))
 	}
 
-	// 结果
-	query = query.Where(&condition)
-	query.Preload("Products.Product").Find(&goods)
-
 	var count int64
+
+	// 数量结果
+	query = query.Where(&condition)
 	query.Count(&count)
+
+	// 详情查询
+	if b.NeedProduct == true {
+		query = query.Preload("Products.Product")
+	}
+
+	query.Find(&goods)
+
 	return goods, count
 }

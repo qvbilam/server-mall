@@ -24,8 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MallClient interface {
 	GetCategory(ctx context.Context, in *CategoryListRequest, opts ...grpc.CallOption) (*CategoryListResponse, error)
-	GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error)
-	GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsListResponse, error)
+	GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsListResponse, error)
+	GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error)
 	Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	Rollback(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -47,8 +47,8 @@ func (c *mallClient) GetCategory(ctx context.Context, in *CategoryListRequest, o
 	return out, nil
 }
 
-func (c *mallClient) GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error) {
-	out := new(GoodsDetailResponse)
+func (c *mallClient) GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsListResponse, error) {
+	out := new(GoodsListResponse)
 	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetGoodsList", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -56,8 +56,8 @@ func (c *mallClient) GetGoodsList(ctx context.Context, in *GoodsListRequest, opt
 	return out, nil
 }
 
-func (c *mallClient) GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsListResponse, error) {
-	out := new(GoodsListResponse)
+func (c *mallClient) GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error) {
+	out := new(GoodsDetailResponse)
 	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetGoodsDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -88,8 +88,8 @@ func (c *mallClient) Rollback(ctx context.Context, in *SellRequest, opts ...grpc
 // for forward compatibility
 type MallServer interface {
 	GetCategory(context.Context, *CategoryListRequest) (*CategoryListResponse, error)
-	GetGoodsList(context.Context, *GoodsListRequest) (*GoodsDetailResponse, error)
-	GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsListResponse, error)
+	GetGoodsList(context.Context, *GoodsListRequest) (*GoodsListResponse, error)
+	GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsDetailResponse, error)
 	Sell(context.Context, *SellRequest) (*emptypb.Empty, error)
 	Rollback(context.Context, *SellRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMallServer()
@@ -102,10 +102,10 @@ type UnimplementedMallServer struct {
 func (UnimplementedMallServer) GetCategory(context.Context, *CategoryListRequest) (*CategoryListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCategory not implemented")
 }
-func (UnimplementedMallServer) GetGoodsList(context.Context, *GoodsListRequest) (*GoodsDetailResponse, error) {
+func (UnimplementedMallServer) GetGoodsList(context.Context, *GoodsListRequest) (*GoodsListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGoodsList not implemented")
 }
-func (UnimplementedMallServer) GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsListResponse, error) {
+func (UnimplementedMallServer) GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGoodsDetail not implemented")
 }
 func (UnimplementedMallServer) Sell(context.Context, *SellRequest) (*emptypb.Empty, error) {

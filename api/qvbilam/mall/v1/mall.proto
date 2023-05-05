@@ -12,7 +12,7 @@ message CategoryResponse {
 }
 
 message CategoryListResponse {
-  repeated CategoryResponse category = 1;
+  repeated CategoryResponse list = 1;
 }
 
 message CategoryListRequest {
@@ -21,7 +21,7 @@ message CategoryListRequest {
 
 message ProductResponse{
   int64 id = 1;
-  int64 name = 2;
+  string name = 2;
   string icon = 3;
   int64 price = 4;
   string introduce = 5;
@@ -51,7 +51,7 @@ message GoodsDetailResponse{
   bool isHot = 11;
   bool isUnlimited = 12;
   bool onSale = 13;
-  GoodsProductResponse products = 14;
+  repeated GoodsProductResponse products = 14;
 }
 
 message GoodsListResponse{
@@ -68,6 +68,7 @@ message GoodsListRequest {
   int64 categoryId = 2;
   pagePb.v1.PageRequest page = 3;
   bool OnSale = 4;
+  bool NeedProduct = 5;
 }
 
 message SellRequest {
@@ -79,8 +80,8 @@ message SellRequest {
 
 service Mall {
   rpc GetCategory(CategoryListRequest) returns (CategoryListResponse); // 分类列表
-  rpc GetGoodsList(GoodsListRequest) returns (GoodsDetailResponse); // 商品列表
-  rpc GetGoodsDetail(GoodsDetailRequest) returns (GoodsListResponse); // 商品详情
+  rpc GetGoodsList(GoodsListRequest) returns (GoodsListResponse); // 商品列表
+  rpc GetGoodsDetail(GoodsDetailRequest) returns (GoodsDetailResponse); // 商品详情
   rpc Sell(SellRequest) returns (google.protobuf.Empty); // 售卖
   rpc Rollback(SellRequest) returns (google.protobuf.Empty); // 回滚
 }
