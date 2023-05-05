@@ -1,25 +1,86 @@
 syntax = "proto3";
 package userPb.v1;
-//import "google/protobuf/empty.proto";
-//import "api/qvbilam/page/v1/page.proto";
+import "google/protobuf/empty.proto";
+import "api/qvbilam/page/v1/page.proto";
 option go_package="mall/api/qvbilam/mall/v1/mallPb;v1";
 
-message categoryResponse {
+message CategoryResponse {
   int64 id = 1;
   int64 pid = 2;
   string name = 3;
   string tag = 4;
 }
 
-message categoryListResponse {
-  repeated categoryResponse category = 1;
+message CategoryListResponse {
+  repeated CategoryResponse category = 1;
 }
 
-message categoryListRequest {
+message CategoryListRequest {
   int64 pid = 1;
+}
+
+message ProductResponse{
+  int64 id = 1;
+  int64 name = 2;
+  string icon = 3;
+  int64 price = 4;
+  string introduce = 5;
+  string type = 6;
+  string tag = 7;
+}
+
+message GoodsProductResponse{
+  int64 id = 1;
+  int64 goodsId = 2;
+  int64 productId = 3;
+  int64 count =4;
+  ProductResponse product = 5;
+}
+
+message GoodsDetailResponse{
+  int64 id = 1;
+  int64 categoryId = 2;
+  string name = 3;
+  string introduce = 4;
+  string icon = 5;
+  string pay_type = 6;
+  int64 price = 7;
+  int64 originalPrice = 8;
+  int64 stocks = 9;
+  int64 soldCount = 10;
+  bool isHot = 11;
+  bool isUnlimited = 12;
+  bool onSale = 13;
+  GoodsProductResponse products = 14;
+}
+
+message GoodsListResponse{
+  int64 total = 1;
+  repeated GoodsDetailResponse list = 2;
+}
+
+message GoodsDetailRequest{
+  int64 id = 1;
+}
+
+message GoodsListRequest {
+  repeated int64 ids = 1;
+  int64 categoryId = 2;
+  pagePb.v1.PageRequest page = 3;
+  bool OnSale = 4;
+}
+
+message SellRequest {
+  string orderSn = 1;
+  int64 goodsId = 2;
+  int64 count = 3;
 }
 
 
 service Mall {
-  rpc GetCategory(categoryListRequest) returns (categoryListResponse);
+  rpc GetCategory(CategoryListRequest) returns (CategoryListResponse); // 分类列表
+  rpc GetGoodsList(GoodsListRequest) returns (GoodsDetailResponse); // 商品列表
+  rpc GetGoodsDetail(GoodsDetailRequest) returns (GoodsListResponse); // 商品详情
+  rpc Sell(SellRequest) returns (google.protobuf.Empty); // 售卖
+  rpc Rollback(SellRequest) returns (google.protobuf.Empty); // 回滚
 }

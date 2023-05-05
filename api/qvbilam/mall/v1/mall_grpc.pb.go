@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,6 +24,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MallClient interface {
 	GetCategory(ctx context.Context, in *CategoryListRequest, opts ...grpc.CallOption) (*CategoryListResponse, error)
+	GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error)
+	GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsListResponse, error)
+	Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Rollback(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type mallClient struct {
@@ -42,11 +47,51 @@ func (c *mallClient) GetCategory(ctx context.Context, in *CategoryListRequest, o
 	return out, nil
 }
 
+func (c *mallClient) GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error) {
+	out := new(GoodsDetailResponse)
+	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetGoodsList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mallClient) GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsListResponse, error) {
+	out := new(GoodsListResponse)
+	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetGoodsDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mallClient) Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/Sell", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mallClient) Rollback(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/Rollback", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MallServer is the server API for Mall service.
 // All implementations must embed UnimplementedMallServer
 // for forward compatibility
 type MallServer interface {
 	GetCategory(context.Context, *CategoryListRequest) (*CategoryListResponse, error)
+	GetGoodsList(context.Context, *GoodsListRequest) (*GoodsDetailResponse, error)
+	GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsListResponse, error)
+	Sell(context.Context, *SellRequest) (*emptypb.Empty, error)
+	Rollback(context.Context, *SellRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMallServer()
 }
 
@@ -56,6 +101,18 @@ type UnimplementedMallServer struct {
 
 func (UnimplementedMallServer) GetCategory(context.Context, *CategoryListRequest) (*CategoryListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCategory not implemented")
+}
+func (UnimplementedMallServer) GetGoodsList(context.Context, *GoodsListRequest) (*GoodsDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGoodsList not implemented")
+}
+func (UnimplementedMallServer) GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGoodsDetail not implemented")
+}
+func (UnimplementedMallServer) Sell(context.Context, *SellRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Sell not implemented")
+}
+func (UnimplementedMallServer) Rollback(context.Context, *SellRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Rollback not implemented")
 }
 func (UnimplementedMallServer) mustEmbedUnimplementedMallServer() {}
 
@@ -88,6 +145,78 @@ func _Mall_GetCategory_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Mall_GetGoodsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GoodsListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MallServer).GetGoodsList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/userPb.v1.Mall/GetGoodsList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MallServer).GetGoodsList(ctx, req.(*GoodsListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mall_GetGoodsDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GoodsDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MallServer).GetGoodsDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/userPb.v1.Mall/GetGoodsDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MallServer).GetGoodsDetail(ctx, req.(*GoodsDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mall_Sell_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SellRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MallServer).Sell(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/userPb.v1.Mall/Sell",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MallServer).Sell(ctx, req.(*SellRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mall_Rollback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SellRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MallServer).Rollback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/userPb.v1.Mall/Rollback",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MallServer).Rollback(ctx, req.(*SellRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Mall_ServiceDesc is the grpc.ServiceDesc for Mall service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +227,22 @@ var Mall_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCategory",
 			Handler:    _Mall_GetCategory_Handler,
+		},
+		{
+			MethodName: "GetGoodsList",
+			Handler:    _Mall_GetGoodsList_Handler,
+		},
+		{
+			MethodName: "GetGoodsDetail",
+			Handler:    _Mall_GetGoodsDetail_Handler,
+		},
+		{
+			MethodName: "Sell",
+			Handler:    _Mall_Sell_Handler,
+		},
+		{
+			MethodName: "Rollback",
+			Handler:    _Mall_Rollback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

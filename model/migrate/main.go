@@ -156,16 +156,19 @@ func initProduct(tx *gorm.DB) {
 		{
 			Name:  "金币",
 			Type:  enum.ProductTypeCoin,
+			Tag:   enum.ProductTypeCoin,
 			Price: 1,
 		},
 		{
 			Name:  "月卡",
-			Type:  enum.ProductTypeMonthCard,
+			Type:  enum.ProductTypeTicket,
+			Tag:   enum.ProductTagMonthTicket,
 			Price: 1,
 		},
 		{
 			Name:  "超级月卡",
-			Type:  enum.ProductTypeSuperMonthCard,
+			Type:  enum.ProductTypeTicket,
+			Tag:   enum.ProductTagSuperMonthTicket,
 			Price: 1,
 		},
 	}
