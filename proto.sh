@@ -15,6 +15,7 @@ function proto {
 proto page page v1
 proto user user v1
 proto mall mall v1
+proto pay order v1
 
 
 

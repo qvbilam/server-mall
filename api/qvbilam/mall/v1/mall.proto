@@ -1,5 +1,5 @@
 syntax = "proto3";
-package userPb.v1;
+package mallPb.v1;
 import "google/protobuf/empty.proto";
 import "api/qvbilam/page/v1/page.proto";
 option go_package="mall/api/qvbilam/mall/v1/mallPb;v1";
@@ -72,9 +72,20 @@ message GoodsListRequest {
 }
 
 message SellRequest {
-  string orderSn = 1;
-  int64 goodsId = 2;
-  int64 count = 3;
+  int64 id = 1;
+  int64 count = 2;
+  int64 userId =3;
+}
+
+message SellResponse {
+  PayType payType = 1;
+  string orderSn = 2;
+}
+
+enum PayType {
+  None = 0;
+  Money = 1;
+  Coin = 2;
 }
 
 
@@ -82,6 +93,6 @@ service Mall {
   rpc GetCategory(CategoryListRequest) returns (CategoryListResponse); // 分类列表
   rpc GetGoodsList(GoodsListRequest) returns (GoodsListResponse); // 商品列表
   rpc GetGoodsDetail(GoodsDetailRequest) returns (GoodsDetailResponse); // 商品详情
-  rpc Sell(SellRequest) returns (google.protobuf.Empty); // 售卖
+  rpc Sell(SellRequest) returns (SellResponse); // 售卖
   rpc Rollback(SellRequest) returns (google.protobuf.Empty); // 回滚
 }

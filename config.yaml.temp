@@ -12,3 +12,8 @@ user-server:
   host: "127.0.0.1"
   port: 9801
   name: "grpc-user-server"
+# 支付服务
+pay-server:
+  host: "127.0.0.1"
+  port: 9800
+  name: "grpc-pay-server"

@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	payProto "mall/api/qvbilam/pay/v1"
 	userProto "mall/api/qvbilam/user/v1"
 	"mall/global"
 	"time"
@@ -19,6 +20,7 @@ type dialConfig struct {
 
 type serverClientConfig struct {
 	userDialConfig *dialConfig
+	payDialConfig  *dialConfig
 }
 
 func InitServer() {
@@ -28,9 +30,15 @@ func InitServer() {
 			port: global.ServerConfig.UserServerConfig.Port,
 			name: global.ServerConfig.UserServerConfig.Name,
 		},
+		payDialConfig: &dialConfig{
+			host: global.ServerConfig.PayServerConfig.Host,
+			port: global.ServerConfig.PayServerConfig.Port,
+			name: global.ServerConfig.PayServerConfig.Name,
+		},
 	}
 
 	s.initUserServer()
+	s.initPayServer()
 }
 
 func clientOption() []retry.CallOption {
@@ -57,4 +65,20 @@ func (s *serverClientConfig) initUserServer() {
 	userClient := userProto.NewUserClient(conn)
 
 	global.UserServerClient = userClient
+}
+
+func (s *serverClientConfig) initPayServer() {
+	opts := clientOption()
+
+	conn, err := grpc.Dial(
+		fmt.Sprintf("%s:%d", s.payDialConfig.host, s.payDialConfig.port),
+		grpc.WithInsecure(),
+		grpc.WithUnaryInterceptor(retry.UnaryClientInterceptor(opts...)),
+	)
+	if err != nil {
+		zap.S().Fatalf("%s dial error: %s", s.payDialConfig.name, err)
+	}
+
+	payClient := payProto.NewPayClient(conn)
+	global.PayServerClient = payClient
 }

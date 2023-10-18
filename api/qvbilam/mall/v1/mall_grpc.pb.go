@@ -26,7 +26,7 @@ type MallClient interface {
 	GetCategory(ctx context.Context, in *CategoryListRequest, opts ...grpc.CallOption) (*CategoryListResponse, error)
 	GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsListResponse, error)
 	GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error)
-	Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*SellResponse, error)
 	Rollback(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -40,7 +40,7 @@ func NewMallClient(cc grpc.ClientConnInterface) MallClient {
 
 func (c *mallClient) GetCategory(ctx context.Context, in *CategoryListRequest, opts ...grpc.CallOption) (*CategoryListResponse, error) {
 	out := new(CategoryListResponse)
-	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetCategory", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mallPb.v1.Mall/GetCategory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (c *mallClient) GetCategory(ctx context.Context, in *CategoryListRequest, o
 
 func (c *mallClient) GetGoodsList(ctx context.Context, in *GoodsListRequest, opts ...grpc.CallOption) (*GoodsListResponse, error) {
 	out := new(GoodsListResponse)
-	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetGoodsList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mallPb.v1.Mall/GetGoodsList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,16 +58,16 @@ func (c *mallClient) GetGoodsList(ctx context.Context, in *GoodsListRequest, opt
 
 func (c *mallClient) GetGoodsDetail(ctx context.Context, in *GoodsDetailRequest, opts ...grpc.CallOption) (*GoodsDetailResponse, error) {
 	out := new(GoodsDetailResponse)
-	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/GetGoodsDetail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mallPb.v1.Mall/GetGoodsDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *mallClient) Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/Sell", in, out, opts...)
+func (c *mallClient) Sell(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*SellResponse, error) {
+	out := new(SellResponse)
+	err := c.cc.Invoke(ctx, "/mallPb.v1.Mall/Sell", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (c *mallClient) Sell(ctx context.Context, in *SellRequest, opts ...grpc.Cal
 
 func (c *mallClient) Rollback(ctx context.Context, in *SellRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/userPb.v1.Mall/Rollback", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mallPb.v1.Mall/Rollback", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ type MallServer interface {
 	GetCategory(context.Context, *CategoryListRequest) (*CategoryListResponse, error)
 	GetGoodsList(context.Context, *GoodsListRequest) (*GoodsListResponse, error)
 	GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsDetailResponse, error)
-	Sell(context.Context, *SellRequest) (*emptypb.Empty, error)
+	Sell(context.Context, *SellRequest) (*SellResponse, error)
 	Rollback(context.Context, *SellRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMallServer()
 }
@@ -108,7 +108,7 @@ func (UnimplementedMallServer) GetGoodsList(context.Context, *GoodsListRequest) 
 func (UnimplementedMallServer) GetGoodsDetail(context.Context, *GoodsDetailRequest) (*GoodsDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGoodsDetail not implemented")
 }
-func (UnimplementedMallServer) Sell(context.Context, *SellRequest) (*emptypb.Empty, error) {
+func (UnimplementedMallServer) Sell(context.Context, *SellRequest) (*SellResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sell not implemented")
 }
 func (UnimplementedMallServer) Rollback(context.Context, *SellRequest) (*emptypb.Empty, error) {
@@ -137,7 +137,7 @@ func _Mall_GetCategory_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userPb.v1.Mall/GetCategory",
+		FullMethod: "/mallPb.v1.Mall/GetCategory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MallServer).GetCategory(ctx, req.(*CategoryListRequest))
@@ -155,7 +155,7 @@ func _Mall_GetGoodsList_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userPb.v1.Mall/GetGoodsList",
+		FullMethod: "/mallPb.v1.Mall/GetGoodsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MallServer).GetGoodsList(ctx, req.(*GoodsListRequest))
@@ -173,7 +173,7 @@ func _Mall_GetGoodsDetail_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userPb.v1.Mall/GetGoodsDetail",
+		FullMethod: "/mallPb.v1.Mall/GetGoodsDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MallServer).GetGoodsDetail(ctx, req.(*GoodsDetailRequest))
@@ -191,7 +191,7 @@ func _Mall_Sell_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userPb.v1.Mall/Sell",
+		FullMethod: "/mallPb.v1.Mall/Sell",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MallServer).Sell(ctx, req.(*SellRequest))
@@ -209,7 +209,7 @@ func _Mall_Rollback_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userPb.v1.Mall/Rollback",
+		FullMethod: "/mallPb.v1.Mall/Rollback",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MallServer).Rollback(ctx, req.(*SellRequest))
@@ -221,7 +221,7 @@ func _Mall_Rollback_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Mall_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "userPb.v1.Mall",
+	ServiceName: "mallPb.v1.Mall",
 	HandlerType: (*MallServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

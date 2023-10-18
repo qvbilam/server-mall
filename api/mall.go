@@ -65,9 +65,17 @@ func (s *MallServer) GetGoodsDetail(ctx context.Context, request *proto.GoodsDet
 	return s.goodsToResponse(goods), nil
 }
 
-// Sell 售卖 todo
-func (s *MallServer) Sell(ctx context.Context, request *proto.SellRequest) (*emptypb.Empty, error) {
-	return nil, nil
+// Sell 售卖
+func (s *MallServer) Sell(ctx context.Context, request *proto.SellRequest) (*proto.SellResponse, error) {
+	b := business.GoodsBusiness{ID: request.Id, Count: request.Count, UserId: request.UserId}
+	res, err := b.Sell()
+	if err != nil {
+		return nil, err
+	}
+	return &proto.SellResponse{
+		PayType: res.PayType,
+		OrderSn: res.OrderSn,
+	}, nil
 }
 
 // Rollback 回滚 todo

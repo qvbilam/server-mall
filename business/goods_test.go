@@ -2,9 +2,11 @@ package business
 
 import (
 	"fmt"
+	"google.golang.org/grpc"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	payProto "mall/api/qvbilam/pay/v1"
 	"mall/global"
 	"testing"
 )
@@ -27,6 +29,17 @@ func initDBClient() {
 	global.DB = db
 }
 
+func initPayServer() {
+	host := "127.0.0.1"
+	port := 9800
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", host, port), grpc.WithInsecure())
+	if err != nil {
+		panic(any(err))
+	}
+	payClient := payProto.NewPayClient(conn)
+	global.PayServerClient = payClient
+}
+
 func TestGoodsBusiness_GoodsList(t *testing.T) {
 	initDBClient()
 	b := GoodsBusiness{}
@@ -36,4 +49,18 @@ func TestGoodsBusiness_GoodsList(t *testing.T) {
 	for _, p := range goods {
 		fmt.Printf("%+v\n", p)
 	}
+}
+
+func TestGoodsBusiness_Sell(t *testing.T) {
+	initDBClient()
+	initPayServer()
+	b := GoodsBusiness{}
+	b.UserId = 1
+	b.ID = 1
+	b.Count = 10
+	res, err := b.Sell()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("orderSn: %s\n", res.OrderSn)
 }
